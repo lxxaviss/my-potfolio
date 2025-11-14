@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspandiyar | Full Stack & Mobile Developer</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/main.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated particle background canvas -->
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- Loading screen -->
+    <div class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>LOADING PORTFOLIO...</p>
+        </div>
+    </div>
+
+    <!-- Custom cursor elements -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Scroll progress bar -->
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar"></div>
+    </div>
+
+    <!-- Fixed terminal toggle button - moved to bottom left to avoid conflict with scroll-to-top -->
+    <button class="terminal-toggle" id="terminalToggle" aria-label="Toggle Terminal">
+        <i class="fas fa-terminal"></i>
+    </button>
+
+    <!-- Interactive terminal -->
+    <div class="terminal-container" id="terminalContainer">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="terminal-button close" id="terminalClose"></span>
+                <span class="terminal-button minimize"></span>
+                <span class="terminal-button maximize"></span>
+            </div>
+            <div class="terminal-title">ASPANDIYAR@PORTFOLIO:~$</div>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+            <div class="terminal-line">
+                <span class="terminal-prompt">visitor@portfolio:~$</span>
+                <span class="terminal-text">Welcome to Aspandiyar's Portfolio Terminal v1.0</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-text">Type 'help' to see available commands</span>
+            </div>
+        </div>
+        <div class="terminal-input-line">
+            <span class="terminal-prompt">visitor@portfolio:~$</span>
+            <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <!-- Achievements panel -->
+    <div class="achievements-panel" id="achievementsPanel">
+        <div class="achievements-header">
+            <i class="fas fa-trophy"></i>
+            <span>Achievements</span>
+            <button class="close-achievements" id="closeAchievements">×</button>
+        </div>
+        <div class="achievements-list" id="achievementsList"></div>
+        <div class="achievements-progress">
+            <span id="achievementsCount">0/10</span> Unlocked
+        </div>
+    </div>
+
+    <!-- Fixed achievement notification - moved to top right corner -->
+    <div class="achievement-notification" id="achievementNotification">
+        <div class="achievement-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <div class="achievement-content">
+            <div class="achievement-title">Achievement Unlocked!</div>
+            <div class="achievement-description"></div>
+        </div>
+    </div>
+
+    <!-- Control panel -->
+    <div class="control-panel">
+        <button class="control-btn" id="matrixToggle" data-tooltip="Matrix Mode">
+            <i class="fas fa-code"></i>
+        </button>
+        <button class="control-btn" id="themeToggle" data-tooltip="Toggle Theme">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="control-btn" id="achievementsToggle" data-tooltip="Achievements">
+            <i class="fas fa-trophy"></i>
+            <span class="achievement-badge" id="achievementBadge">0</span>
+        </button>
+    </div>
+
+    <!-- Matrix rain canvas -->
+    <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
+
+    <!-- Fixed skill tree modal - improved centering and responsiveness -->
+    <div class="skill-tree-modal" id="skillTreeModal">
+        <div class="skill-tree-container">
+            <div class="skill-tree-header">
+                <h3>Interactive Skill Map</h3>
+                <button class="close-skill-tree" id="closeSkillTree">×</button>
+            </div>
+            <div class="skill-tree-content">
+                <canvas id="skillTreeCanvas"></canvas>
+            </div>
+            <div class="skill-tree-legend">
+                <div class="legend-item">
+                    <div class="legend-color expert"></div>
+                    <span>Expert</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color intermediate"></div>
+                    <span>Intermediate</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color learning"></div>
+                    <span>Learning</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Easter egg indicator -->
+    <div class="easter-egg-indicator" id="easterEggIndicator">
+        <i class="fas fa-gift"></i>
+        <span>Secret unlocked!</span>
+    </div>
+
+    <!-- Header with navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav-main">
+                <div class="logo">
+                    <span class="logo-icon">A</span>
+                    <span class="logo-text">SPANDIYAR</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero section -->
+        <section id="home" class="hero">
+            <div class="hero-background">
+                <div class="gradient-blur gradient-blur-1"></div>
+                <div class="gradient-blur gradient-blur-2"></div>
+                <div class="gradient-blur gradient-blur-3"></div>
+            </div>
+            
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="hero-badge" data-reveal>
+                            <span class="badge-dot"></span>
+                            AVAILABLE FOR WORK
+                        </div>
+                        <h1 class="hero-title" data-reveal>
+                            FULL STACK
+                            <br />
+                            <span class="title-highlight">DEVELOPER</span>
+                        </h1>
+                        <p class="hero-description" data-reveal>
+                            17-year-old developer from Kazakhstan, crafting innovative 
+                            <span class="text-gradient">web and mobile solutions</span> with 2 years of experience.
+                        </p>
+                        <div class="hero-actions" data-reveal>
+                            <a href="#projects" class="btn btn-primary">
+                                <span>View Projects</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                            <a href="#contact" class="btn btn-secondary">
+                                <span>Get In Touch</span>
+                                <i class="fas fa-paper-plane"></i>
+                            </a>
+                        </div>
+                        <div class="hero-stats" data-reveal>
+                            <div class="stat-item">
+                                <div class="stat-number">2+</div>
+                                <div class="stat-label">Years Experience</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">15+</div>
+                                <div class="stat-label">Technologies</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">20+</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 3D eyes section -->
+                    <div class="hero-3d" data-reveal>
+                        <div class="model-container">
+                            <div class="eyes-container" id="eyesContainer">
+                                <div class="eye left-eye">
+                                    <div class="eyeball">
+                                        <div class="iris">
+                                            <div class="pupil"></div>
+                                            <div class="glare"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="eye right-eye">
+                                    <div class="eyeball">
+                                        <div class="iris">
+                                            <div class="pupil"></div>
+                                            <div class="glare"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="model-info">
+                                <div class="info-dot"></div>
+                                <span>TRACKING ENABLED</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+                <span>SCROLL DOWN</span>
+            </div>
+        </section>
+
+        <!-- About section -->
+        <section id="about" class="about-preview section">
+            <div class="container">
+                <div class="section-header" data-reveal>
+                    <span class="section-badge">About Me</span>
+                    <h2 class="section-title">
+                        Building the future, one line at a 
+                        <span class="text-gradient">time</span>
+                    </h2>
+                </div>
+                
+                <div class="about-content-grid">
+                    <div class="about-image" data-reveal>
+                        <div class="image-wrapper">
+                            <img src="portf.jpg" alt="Aspandiyar - Full Stack Developer">
+                            <div class="image-decoration"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="about-text" data-reveal>
+                        <p class="lead-text">
+                            Hi, I'm Aspandiyar, a 17-year-old full stack and mobile developer 
+                            studying at AITUC College in Astana, Kazakhstan.
+                        </p>
+                        <p>
+                            I've been passionate about programming for 2 years, specializing in 
+                            building modern web and mobile applications. I love solving complex 
+                            problems and creating user-friendly digital experiences that make a difference.
+                        </p>
+                        <p>
+                            Currently pursuing my education while working on exciting projects 
+                            that challenge me to grow as a developer. I'm always eager to learn 
+                            new technologies and collaborate on innovative solutions.
+                        </p>
+                        <div class="about-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Astana, Kazakhstan</span>
+                        </div>
+                        <div class="about-location">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>AITUC College</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills section -->
+        <section id="skills" class="skills-section section">
+            <div class="container">
+                <div class="section-header" data-reveal>
+                    <span class="section-badge">SKILLS & TECHNOLOGIES</span>
+                    <h2 class="section-title">
+                        MY TECHNICAL 
+                        <span class="text-gradient">STACK</span>
+                    </h2>
+                    <p class="section-subtitle">
+                        Mastering modern technologies to build innovative solutions
+                    </p>
+                    <button class="btn btn-primary" id="openSkillTree" style="margin-top: 1rem;">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>View Interactive Skill Map</span>
+                    </button>
+                </div>
+                
+                <!-- Scrolling skills banner -->
+                <div class="skills-marquee-wrapper" data-reveal>
+                    <div class="skills-marquee">
+                        <div class="skills-track">
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" class="skill-badge"><i class="fab fa-html5"></i> HTML5</a>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" class="skill-badge"><i class="fab fa-css3-alt"></i> CSS3</a>
+                            <a href="https://sass-lang.com/documentation" target="_blank" class="skill-badge"><i class="fab fa-sass"></i> SCSS</a>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="skill-badge"><i class="fab fa-js"></i> JavaScript</a>
+                            <a href="https://react.dev/" target="_blank" class="skill-badge"><i class="fab fa-react"></i> React</a>
+                            <a href="https://vuejs.org/guide/introduction.html" target="_blank" class="skill-badge"><i class="fab fa-vuejs"></i> Vue.js</a>
+                            <a href="https://nuxt.com/docs/getting-started/introduction" target="_blank" class="skill-badge"><i class="fab fa-vuejs"></i> Nuxt.js</a>
+                            <a href="https://ant.design/docs/react/introduce" target="_blank" class="skill-badge"><i class="fas fa-cube"></i> Ant Design</a>
+                            <a href="https://nodejs.org/docs/latest/api/" target="_blank" class="skill-badge"><i class="fab fa-node-js"></i> Node.js</a>
+                            <a href="https://docs.python.org/3/" target="_blank" class="skill-badge"><i class="fab fa-python"></i> Python</a>
+                            <a href="https://docs.oracle.com/en/java/" target="_blank" class="skill-badge"><i class="fab fa-java"></i> Java</a>
+                            <a href="https://www.postgresql.org/docs/" target="_blank" class="skill-badge"><i class="fas fa-database"></i> PostgreSQL</a>
+                            <a href="https://www.w3schools.com/sql/" target="_blank" class="skill-badge"><i class="fas fa-database"></i> SQL</a>
+                            <a href="https://docs.flutter.dev/" target="_blank" class="skill-badge"><i class="fas fa-mobile"></i> Flutter</a>
+                            <a href="https://dart.dev/guides" target="_blank" class="skill-badge"><i class="fas fa-code"></i> Dart</a>
+                            <a href="https://git-scm.com/doc" target="_blank" class="skill-badge"><i class="fab fa-git-alt"></i> Git</a>
+                            <a href="https://docs.docker.com/" target="_blank" class="skill-badge"><i class="fab fa-docker"></i> Docker</a>
+                            <a href="https://docs.github.com/" target="_blank" class="skill-badge"><i class="fab fa-github"></i> GitHub</a>
+                            <!-- Duplicate for seamless loop -->
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" class="skill-badge"><i class="fab fa-html5"></i> HTML5</a>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" class="skill-badge"><i class="fab fa-css3-alt"></i> CSS3</a>
+                            <a href="https://sass-lang.com/documentation" target="_blank" class="skill-badge"><i class="fab fa-sass"></i> SCSS</a>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="skill-badge"><i class="fab fa-js"></i> JavaScript</a>
+                            <a href="https://react.dev/" target="_blank" class="skill-badge"><i class="fab fa-react"></i> React</a>
+                            <a href="https://vuejs.org/guide/introduction.html" target="_blank" class="skill-badge"><i class="fab fa-vuejs"></i> Vue.js</a>
+                            <a href="https://nuxt.com/docs/getting-started/introduction" target="_blank" class="skill-badge"><i class="fab fa-vuejs"></i> Nuxt.js</a>
+                            <a href="https://ant.design/docs/react/introduce" target="_blank" class="skill-badge"><i class="fas fa-cube"></i> Ant Design</a>
+                            <a href="https://nodejs.org/docs/latest/api/" target="_blank" class="skill-badge"><i class="fab fa-node-js"></i> Node.js</a>
+                            <a href="https://docs.python.org/3/" target="_blank" class="skill-badge"><i class="fab fa-python"></i> Python</a>
+                            <a href="https://docs.oracle.com/en/java/" target="_blank" class="skill-badge"><i class="fab fa-java"></i> Java</a>
+                            <a href="https://www.postgresql.org/docs/" target="_blank" class="skill-badge"><i class="fas fa-database"></i> PostgreSQL</a>
+                            <a href="https://www.w3schools.com/sql/" target="_blank" class="skill-badge"><i class="fas fa-database"></i> SQL</a>
+                            <a href="https://docs.flutter.dev/" target="_blank" class="skill-badge"><i class="fas fa-mobile"></i> Flutter</a>
+                            <a href="https://dart.dev/guides" target="_blank" class="skill-badge"><i class="fas fa-code"></i> Dart</a>
+                            <a href="https://git-scm.com/doc" target="_blank" class="skill-badge"><i class="fab fa-git-alt"></i> Git</a>
+                            <a href="https://docs.docker.com/" target="_blank" class="skill-badge"><i class="fab fa-docker"></i> Docker</a>
+                            <a href="https://docs.github.com/" target="_blank" class="skill-badge"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reversed scrolling banner -->
+                <div class="skills-marquee-wrapper reverse" data-reveal>
+                    <div class="skills-marquee">
+                        <div class="skills-track">
+                            <div class="skill-badge secondary"><i class="fab fa-node-js"></i> BACKEND DEV</div>
+                            <div class="skill-badge secondary"><i class="fas fa-mobile-alt"></i> MOBILE APPS</div>
+                            <div class="skill-badge secondary"><i class="fas fa-code"></i> FRONTEND DEV</div>
+                            <div class="skill-badge secondary"><i class="fas fa-database"></i> DATABASE DESIGN</div>
+                            <div class="skill-badge secondary"><i class="fab fa-docker"></i> DEVOPS</div>
+                            <div class="skill-badge secondary"><i class="fas fa-palette"></i> UI/UX DESIGN</div>
+                            <div class="skill-badge secondary"><i class="fas fa-server"></i> API DEV</div>
+                            <div class="skill-badge secondary"><i class="fas fa-cloud"></i> CLOUD SERVICES</div>
+                            <!-- Duplicate for seamless loop -->
+                            <div class="skill-badge secondary"><i class="fab fa-node-js"></i> BACKEND DEV</div>
+                            <div class="skill-badge secondary"><i class="fas fa-mobile-alt"></i> MOBILE APPS</div>
+                            <div class="skill-badge secondary"><i class="fas fa-code"></i> FRONTEND DEV</div>
+                            <div class="skill-badge secondary"><i class="fas fa-database"></i> DATABASE DESIGN</div>
+                            <div class="skill-badge secondary"><i class="fab fa-docker"></i> DEVOPS</div>
+                            <div class="skill-badge secondary"><i class="fas fa-palette"></i> UI/UX DESIGN</div>
+                            <div class="skill-badge secondary"><i class="fas fa-server"></i> API DEV</div>
+                            <div class="skill-badge secondary"><i class="fas fa-cloud"></i> CLOUD SERVICES</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects section -->
+        <section id="projects" class="featured-projects section">
+            <div class="container">
+                <div class="section-header" data-reveal>
+                    <span class="section-badge">PORTFOLIO</span>
+                    <h2 class="section-title">
+                        FEATURED 
+                        <span class="text-gradient">PROJECTS</span>
+                    </h2>
+                </div>
+                
+                <div class="projects-showcase">
+                    <!-- Project 1 - Streetwear Landing -->
+                    <div class="project-showcase" data-reveal>
+                        <div class="project-visual">
+                            <div class="project-image-wrapper">
+                                <img src="web.jpg" alt="Streetwear Landing Website">
+                                <div class="project-overlay">
+                                    <a href="https://streetwear-landing.vercel.app/" target="_blank" class="project-link">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <div class="project-number">01</div>
+                            <h3 class="project-title">STREETWEAR LANDING</h3>
+                            <p class="project-description">
+                                A modern, fully responsive streetwear e-commerce landing page with 
+                                stunning visuals, smooth animations, and an engaging user experience. 
+                                Built with cutting-edge web technologies.
+                            </p>
+                            <div class="project-tags">
+                                <span class="tag">HTML5</span>
+                                <span class="tag">CSS3</span>
+                                <span class="tag">JavaScript</span>
+                                <span class="tag">Responsive</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://streetwear-landing.vercel.app/" target="_blank" class="link-item btn btn-primary">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    <span>VIEW DEMO</span>
+                                </a>
+                                <a href="https://github.com/lxxaviss/streetwear-landing" target="_blank" class="link-item btn btn-secondary">
+                                    <i class="fab fa-github"></i>
+                                    <span>VIEW CODE</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services section -->
+        <section class="services section">
+            <div class="container">
+                <div class="section-header" data-reveal>
+                    <span class="section-badge">Services</span>
+                    <h2 class="section-title">
+                        What I 
+                        <span class="text-gradient">Offer</span>
+                    </h2>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-card" data-reveal>
+                        <div class="service-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 class="service-title">Full Stack Development</h3>
+                        <p class="service-description">
+                            Building complete web applications from frontend to backend 
+                            using modern frameworks and best practices.
+                        </p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> React & Vue.js Development</li>
+                            <li><i class="fas fa-check"></i> Node.js Backend</li>
+                            <li><i class="fas fa-check"></i> Database Design</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-card" data-reveal>
+                        <div class="service-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="service-title">Mobile Development</h3>
+                        <p class="service-description">
+                            Creating beautiful, performant cross-platform mobile applications 
+                            using Flutter and Dart.
+                        </p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> iOS & Android Apps</li>
+                            <li><i class="fas fa-check"></i> Cross-Platform Solutions</li>
+                            <li><i class="fas fa-check"></i> Native Performance</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-card" data-reveal>
+                        <div class="service-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="service-title">Backend & DevOps</h3>
+                        <p class="service-description">
+                            Designing scalable backend systems with proper database architecture 
+                            and containerization.
+                        </p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> API Development</li>
+                            <li><i class="fas fa-check"></i> Docker Deployment</li>
+                            <li><i class="fas fa-check"></i> Database Optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact section -->
+        <section id="contact" class="cta-section section">
+            <div class="container">
+                <div class="cta-content" data-reveal>
+                    <h2 class="cta-title">
+                        Let's Build Something
+                        <span class="text-gradient">Amazing Together</span>
+                    </h2>
+                    <p class="cta-description">
+                        I'm always excited to work on new projects and collaborate with talented people. 
+                        Feel free to reach out if you have an idea or just want to connect!
+                    </p>
+                    <div class="contact-methods">
+                        <a href="mailto:aspandiyar@example.com" class="btn btn-primary btn-large">
+                            <i class="fas fa-envelope"></i>
+                            <span>Send Email</span>
+                        </a>
+                        <a href="https://github.com/lxxaviss" target="_blank" class="btn btn-secondary btn-large">
+                            <i class="fab fa-github"></i>
+                            <span>View GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="logo">
+                        <span class="logo-icon">A</span>
+                        <span class="logo-text">SPANDIYAR</span>
+                    </div>
+                    <p class="footer-tagline">
+                        Full Stack & Mobile Developer from Kazakhstan
+                    </p>
+                    <div class="social-links">
+                        <a href="https://github.com/lxxaviss" target="_blank" class="social-link" data-tooltip="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link" data-tooltip="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link" data-tooltip="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" data-tooltip="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-nav">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Get in Touch</h4>
+                    <ul>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:aspandiyar@example.com">aspandiyar@example.com</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Astana, Kazakhstan</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 ASPANDIYAR. ALL RIGHTS RESERVED.</p>
+                <p>MADE WITH <i class="fas fa-heart"></i> IN KAZAKHSTAN</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Improved screen crack effect with realistic falling glass shards and black hole -->
+    <div class="screen-crack-overlay" id="screenCrackOverlay">
+        <svg class="crack-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <path class="crack-path crack-1" d="M 960 0 L 1000 300 L 950 600 L 980 900 L 960 1080" stroke="rgba(0,255,136,0.8)" stroke-width="3" fill="none" filter="url(#glow)"/>
+            <path class="crack-path crack-2" d="M 1000 300 L 1200 350 L 1400 380 L 1600 420 L 1920 450" stroke="rgba(0,255,136,0.6)" stroke-width="2" fill="none" filter="url(#glow)"/>
+            <path class="crack-path crack-3" d="M 950 600 L 750 650 L 550 680 L 350 720 L 0 750" stroke="rgba(0,255,136,0.6)" stroke-width="2" fill="none" filter="url(#glow)"/>
+            <path class="crack-path crack-4" d="M 980 900 L 1150 920 L 1300 940 L 1500 960 L 1920 980" stroke="rgba(0,204,255,0.5)" stroke-width="1.5" fill="none" filter="url(#glow)"/>
+            <path class="crack-path crack-5" d="M 1000 300 L 1050 200 L 1100 100 L 1150 50 L 1200 0" stroke="rgba(255,0,255,0.5)" stroke-width="1.5" fill="none" filter="url(#glow)"/>
+        </svg>
+        
+        <div class="glass-shards-container" id="glassShardsContainer"></div>
+        <div class="black-hole" id="blackHole"></div>
+    </div>
+
+    <!-- Scroll-to-top button moved to end with proper z-index (bottom right) -->
+    <button class="scroll-to-top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</body>
+</html>
